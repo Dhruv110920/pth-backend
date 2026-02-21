@@ -1,5 +1,12 @@
 <?php
-$conn = new mysqli("db", "user", "password", "pth_db");
+$host = "YOUR_RENDER_DB_HOST";
+$user = "YOUR_DB_USER";
+$pass = "YOUR_DB_PASSWORD";
+$db   = "YOUR_DB_NAME";
+
+$conn = new mysqli($host, $user, $pass, $db);
+
 if ($conn->connect_error) {
-    die("Database connection failed");
+    die("DB Connection failed: " . $conn->connect_error);
 }
+?>
