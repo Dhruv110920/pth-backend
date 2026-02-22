@@ -3,8 +3,9 @@ FROM php:8.2-apache
 # PHP extensions
 RUN docker-php-ext-install mysqli pdo pdo_mysql
 
-# Apache config for PHP (fixes crash)
-RUN a2dismod mpm_event && a2enmod mpm_prefork rewrite
+# 🔥 FORCE single Apache MPM (fix crash)
+RUN a2dismod mpm_event mpm_worker mpm_prefork \
+ && a2enmod mpm_prefork rewrite
 
 # Railway dynamic port
 RUN sed -i 's/80/${PORT}/g' /etc/apache2/ports.conf \
@@ -13,7 +14,6 @@ RUN sed -i 's/80/${PORT}/g' /etc/apache2/ports.conf \
 # Copy site
 COPY src/ /var/www/html/
 
-# Permissions
 RUN chown -R www-data:www-data /var/www/html
 
 EXPOSE ${PORT}
